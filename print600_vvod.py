@@ -272,10 +272,12 @@ ICON_PNG = "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAFSElEQVR4nO1be1BUVRz+
 # --------------------------------------------------------------------------
 
 def config_dir():
-    if getattr(sys, "frozen", False):
+    exe_dir = os.path.dirname(os.path.abspath(sys.executable))
+    from_store = "\\windowsapps\\" in exe_dir.lower() + "\\"   # установлено из Microsoft Store (MSIX)
+    if getattr(sys, "frozen", False) and not from_store:
         # портативная версия (exe): настройки рядом с программой,
         # если туда можно писать; иначе — в профиле пользователя
-        path = os.path.join(os.path.dirname(os.path.abspath(sys.executable)), "Print600.ru_data")
+        path = os.path.join(exe_dir, "Print600.ru_data")
         try:
             os.makedirs(path, exist_ok=True)
             probe = os.path.join(path, ".probe")
